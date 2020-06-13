@@ -1,5 +1,6 @@
 
 .idea/*
+secrets.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/django,python,jupyternotebooks,zsh
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,python,jupyternotebooks,zsh
