@@ -23,4 +23,6 @@ urlpatterns = [
     # path('rest-auth/registration/', include('rest_auth.')),
 
     path('users/', include('users.urls')),
+    path('assignments/', include('api.assignments.urls')),
+    path('graded_assignments/', include('api.graded_assignments.urls')),
 ]
