@@ -1,6 +1,9 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from api.models import Assignment, Question
+from api.models import Assignment, Question, Choice
+
+User = get_user_model()
 
 
 class StringSerializer(serializers.StringRelatedField):
@@ -13,7 +16,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'choices', 'question', 'order', )
+        fields = ('id', 'choices', 'question', 'order',)
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -27,3 +30,32 @@ class AssignmentSerializer(serializers.ModelSerializer):
     def get_questions(self, obj):
         questions = QuestionSerializer(obj.questions.all(), many=True).data
         return questions
+
+    def create(self, request):
+        data = request.data
+        print('data >> ', data)
+
+        assignment = Assignment()
+        teacher = User.objects.get(username=data['teacher'])
+        assignment.teacher = teacher
+        assignment.title = data['title']
+        assignment.save()
+
+        order = 1
+        for q in data['questions']:
+            newQ = Question()
+            newQ.question = q['title']
+            newQ.order = order
+            newQ.save()
+
+            for c in q['choices']:
+                newC = Choice()
+                newC.title = c
+                newC.save()
+                newQ.choices.add(newC)
+
+            newQ.answer = Choice.objects.get(title=q['answer'])
+            newQ.assignment = assignment
+            newQ.save()
+            order += 1
+        return assignment
