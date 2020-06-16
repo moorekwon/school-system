@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from api.models import Assignment, Question, Choice
+from api.models import Assignment, Question, Choice, GradedAssignment
 
 User = get_user_model()
 
@@ -59,3 +59,36 @@ class AssignmentSerializer(serializers.ModelSerializer):
             newQ.save()
             order += 1
         return assignment
+
+
+class GradedAssignmentSerializer(serializers.ModelSerializer):
+    student = StringSerializer(many=True)
+
+    class Meta:
+        model = GradedAssignment
+        fields = ('__all__')
+
+    def create(self, request):
+        data = request.data
+        print('data >> ', data)
+
+        assignment = Assignment.objects.get(id=data['asntId'])
+        student = User.objects.get(username=data['username'])
+
+        graded_asnt = GradedAssignment()
+        graded_asnt.assignment = assignment
+        graded_asnt.student = student
+
+        questions = [q for q in assignment.questions.all()]
+        answers = [data['answers'][a] for a in data['answers']]
+
+        answered_correct_count = 0
+        for i in range(len(questions)):
+            if questions[i].answer.title == answers[i]:
+                answered_correct_count += 1
+            i += 1
+
+        grade = answered_correct_count / len(questions) * 100
+        graded_asnt.grade = grade
+        graded_asnt.save()
+        return graded_asnt

@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 
+from users.models import Student
+
 User = get_user_model()
 
 
@@ -30,5 +32,6 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
 
 
+admin.site.register(Student)
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
