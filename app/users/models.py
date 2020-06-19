@@ -3,6 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
+    email = models.EmailField(blank=True, null=True)
     is_student = models.BooleanField()
     is_teacher = models.BooleanField()
 

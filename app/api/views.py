@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
@@ -22,14 +23,16 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
 class GradedAssignmentListView(generics.ListAPIView):
     serializer_class = GradedAssignmentSerializer
-    queryset = GradedAssignment.objects.all()
 
     def get_queryset(self):
         queryset = GradedAssignment.objects.all()
         username = self.request.query_params.get('username', None)
+        print('username >> ', username)
 
         if username is not None:
-            queryset = queryset.filteR(student__username=username)
+            queryset = queryset.filter(student__username=username)
+
+        print('queryset >> ', queryset)
         return queryset
 
 
