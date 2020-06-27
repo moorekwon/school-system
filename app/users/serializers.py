@@ -52,9 +52,9 @@ class TokenSerializer(serializers.ModelSerializer):
         fields = ('key', 'user', 'user_type')
 
     def get_user_type(self, obj):
-        serializer_data = UserSerializer(
-            obj.user
-        ).data
+        serializer_data = UserSerializer(obj.user).data
+        print('serializer_data >> ', serializer_data)
+        # print('obj >> ', obj)
         is_student = serializer_data.get('is_student')
         is_teacher = serializer_data.get('is_teacher')
 
