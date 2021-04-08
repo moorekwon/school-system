@@ -6,7 +6,7 @@ authors = ["moorekwon <raccoonhj33@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-django = "^3.0.7"
+django = "^3.0.14"
 djangorestframework = "^3.11.0"
 django-rest-auth = "^0.9.5"
 django-allauth = "^0.42.0"
